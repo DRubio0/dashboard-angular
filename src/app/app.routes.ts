@@ -8,28 +8,31 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
   {
-    path: 'dashboard',
+    path: '',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard').then((m) => m.Dashboard),
-  },
-  {
-    path: 'usuarios',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard').then((m) => m.Dashboard),
-  },
-  {
-    path: 'reportes',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard').then((m) => m.Dashboard),
-  },
-  {
-    path: 'configuracion',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard').then((m) => m.Dashboard),
+    loadComponent: () => import('./shared/layout/shell/shell').then((m) => m.Shell),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard-home').then((m) => m.DashboardHome),
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./features/usuarios/usuarios').then((m) => m.Usuarios),
+      },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./features/reportes/reportes').then((m) => m.Reportes),
+      },
+      {
+        path: 'configuracion',
+        loadComponent: () =>
+          import('./features/configuracion/configuracion').then((m) => m.Configuracion),
+      },
+    ],
   },
   { path: '**', redirectTo: 'login' },
 ];

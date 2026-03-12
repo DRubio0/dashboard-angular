@@ -34,9 +34,6 @@ npm install
 npm start
 ```
 
-Aplicacion disponible en:
-
-- http://localhost:4200/
 
 ## Scripts principales
 

@@ -1,6 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { Component } from '@angular/core';
 
 interface Stat {
   label: string;
@@ -19,30 +17,11 @@ interface Activity {
   status: 'Completado' | 'Pendiente' | 'Cancelado';
 }
 
-interface NavItem {
-  label: string;
-  icon: string;
-  route: string;
-}
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
 })
 export class Dashboard {
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-
-  readonly currentUser = this.authService.currentUser;
-  readonly sidebarOpen = signal(false);
-
-  readonly navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'home', route: '/dashboard' },
-    { label: 'Usuarios', icon: 'users', route: '/usuarios' },
-    { label: 'Reportes', icon: 'chart', route: '/reportes' },
-    { label: 'Configuración', icon: 'settings', route: '/configuracion' },
-  ];
-
   readonly stats: Stat[] = [
     {
       label: 'Usuarios totales',
@@ -85,32 +64,6 @@ export class Dashboard {
     { id: 4, user: 'Luis Rodríguez', action: 'Realizó un pago', date: '10 Mar 2026', status: 'Completado' },
     { id: 5, user: 'Sofía Torres', action: 'Solicitud de reembolso', date: '09 Mar 2026', status: 'Cancelado' },
   ];
-
-  toggleSidebar(): void {
-    this.sidebarOpen.update((open) => !open);
-  }
-
-  navigateTo(path: string): void {
-    this.router.navigate([path]);
-    this.sidebarOpen.set(false);
-  }
-
-  isActive(path: string): boolean {
-    return this.router.url === path;
-  }
-
-  isDashboardRoute(): boolean {
-    return this.router.url === '/dashboard';
-  }
-
-  getCurrentModuleTitle(): string {
-    const current = this.navItems.find((item) => this.isActive(item.route));
-    return current?.label ?? 'Dashboard';
-  }
-
-  logout(): void {
-    this.authService.logout();
-  }
 
   getStatusClasses(status: Activity['status']): string {
     const map: Record<Activity['status'], string> = {
